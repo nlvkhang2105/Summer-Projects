@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "ESP32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${env:HOME}/.arduino15/packages/esp32/hardware/esp32/**",
+                // 2 ĐƯỜNG DẪN THẦN THÁNH ĐỂ FIX LỖI HAL.H:
+                "${env:HOME}/.arduino15/packages/esp32/hardware/esp32/*/tools/sdk/esp32/include/hal/include/**",
+                "${env:HOME}/.arduino15/packages/esp32/hardware/esp32/*/tools/sdk/esp32/include/**",
+                "${env:HOME}/.arduino15/packages/esp32/tools/**"
+            ],
+            "defines": [
+                "ESP32",
+                "ARDUINO=10819",
+                "ARDUINO_ARCH_ESP32"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

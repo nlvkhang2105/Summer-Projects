@@ -4248,6 +4248,16 @@
 	)
 	(wire
 		(pts
+			(xy 57.15 114.3) (xy 63.5 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "14e02543-4cf8-4a74-9bc0-14aec4164f0f")
+	)
+	(wire
+		(pts
 			(xy 184.15 73.66) (xy 234.95 73.66)
 		)
 		(stroke
@@ -4648,16 +4658,6 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 114.3) (xy 63.5 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b76f3003-13d7-4596-ad97-525048264f16")
-	)
-	(wire
-		(pts
 			(xy 128.27 118.11) (xy 118.11 118.11)
 		)
 		(stroke
@@ -4836,8 +4836,8 @@
 		)
 		(uuid "08f6e25d-1bb6-48f7-af05-01dfca0dc8fa")
 	)
-	(label "RPM_PWR_DIODE"
-		(at 57.15 114.3 0)
+	(label "RPM_PWR"
+		(at 59.69 114.3 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4886,16 +4886,6 @@
 		)
 		(uuid "501789cf-05df-446f-9adf-5e8e06fd81a6")
 	)
-	(label "12V_PWR_BATT"
-		(at 60.96 80.01 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "87e5e22e-1d58-4cf9-b674-2d6c95de8c71")
-	)
 	(label "3.3V_PWR"
 		(at 151.13 73.66 0)
 		(effects
@@ -4906,7 +4896,7 @@
 		)
 		(uuid "9c7d0a97-6d97-43b7-a704-e0ec4a5133f7")
 	)
-	(label "RPM_PWR_RESISTOR"
+	(label "RPM_PWR"
 		(at 72.82 114.3 0)
 		(effects
 			(font
