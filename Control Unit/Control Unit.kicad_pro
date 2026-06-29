@@ -511,6 +511,15 @@
         "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
+      },
+      {
+        "clearance": 0.3,
+        "name": "PWR",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 1.0,
+        "tuning_profile": ""
       }
     ],
     "meta": {
@@ -518,13 +527,54 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": []
+    "netclass_patterns": [
+      {
+        "netclass": "PWR",
+        "pattern": "/12V_PWR_Relay"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/12V_PWR_BATT"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/12V_PWR"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/12V_GND"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/3.3V_PWR_SW"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/3.3V_PWR"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/RPM_PWR_DIODE"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/RPM_PWR_RESISTOR"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/RPM_PWR"
+      },
+      {
+        "netclass": "PWR",
+        "pattern": "/RPM_GND"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "./",
+      "plot": "Gerber/",
       "specctra_dsn": "",
       "vrml": ""
     },
@@ -648,7 +698,7 @@
         "uuid": "0264b029-ad6e-452f-8a6e-ecc1baba6373"
       }
     ],
-    "used_designators": "#PWR1-8,C1,D1-2,J1-7,R1-4,SW1,U1-2",
+    "used_designators": "K1,#PWR1-8,C1,D1-2,J1-7,R1-4,SW1,U1-2",
     "variants": []
   },
   "sheets": [
