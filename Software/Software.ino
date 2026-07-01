@@ -7,6 +7,7 @@
 #include <time.h>
 #include <Preferences.h>
 #include "driver/pulse_cnt.h"
+#include "bitmaps.h"
 
 #define COLOR_BLACK   0x0000
 #define COLOR_WHITE   0xFFFF
@@ -30,7 +31,6 @@ Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 const char* ssid = "KhangKhangKhang";
 const char* password = "Vinh*khang2105";
-const uint32_t ONE_WEEK_IN_SECONDS = 7 * 24 * 60 * 60;
 
 class DashboardPage {
 public:
@@ -76,15 +76,15 @@ public:
   void draw(bool forceRedraw) override {
     if (forceRedraw) {
       tft.setTextSize(2); 
-      tft.setTextColor(COLOR_CYAN, COLOR_BLACK);
+      tft.setTextColor(COLOR_WHITE, COLOR_BLACK);
       tft.setCursor(10, 20); 
       tft.println("ENGINE RPM");
       lastRpm = 99999;
     }
     
     if (rpm != lastRpm || forceRedraw) {
-      if (rpm > 5500) tft.setTextColor(COLOR_RED, COLOR_BLACK);
-      else tft.setTextColor(COLOR_YELLOW, COLOR_BLACK);
+      if (rpm > 200000) tft.setTextColor(COLOR_RED, COLOR_BLACK);
+      else tft.setTextColor(COLOR_WHITE, COLOR_BLACK);
       tft.setTextSize(5); 
       tft.setCursor(30, 90);
       tft.print(rpm);
@@ -99,6 +99,7 @@ private:
   float voltage = 0.0;
   float lastVoltage = -1.0;
 public:
+  bool batteryLow = false;
   void init() override { pinMode(VOLTAGE_PIN, INPUT); }
   void update() override {
     int adcVal = analogRead(VOLTAGE_PIN);
@@ -108,14 +109,18 @@ public:
   void draw(bool forceRedraw) override {
     if (forceRedraw) {
       tft.setTextSize(2); 
-      tft.setTextColor(COLOR_CYAN, COLOR_BLACK);
+      tft.setTextColor(COLOR_WHITE, COLOR_BLACK);
       tft.setCursor(10, 20); 
       tft.print("BATTERY VOLTAGE");
       lastVoltage = -1.0;
     }
     
     if (abs(voltage - lastVoltage) >= 0.1 || forceRedraw) {
-      if (voltage < 11.5) tft.setTextColor(COLOR_RED, COLOR_BLACK);
+      if (voltage < 11.5) tft.setTextColor(COLOR_YELLOW, COLOR_BLACK);
+      if(voltage < 10){
+        batteryLow = true;
+        tft.setTextColor(COLOR_RED, COLOR_BLACK);
+      }
       else tft.setTextColor(COLOR_GREEN, COLOR_BLACK);
       tft.setTextSize(5); 
       tft.setCursor(40, 90);
@@ -165,7 +170,7 @@ public:
   void draw(bool forceRedraw) override {
     if (forceRedraw) {
       tft.setTextSize(2); 
-      tft.setTextColor(COLOR_CYAN, COLOR_BLACK);
+      tft.setTextColor(COLOR_WHITE, COLOR_BLACK);
       tft.setCursor(10, 20); 
       tft.print("ENVIRONMENT");
       lastTemp = -99.0;
@@ -183,10 +188,11 @@ public:
     }
     
     if (abs(temp - lastTemp) >= 0.1 || forceRedraw) {
-      tft.setTextColor(COLOR_YELLOW, COLOR_BLACK); 
+      tft.setTextColor(COLOR_WHITE, COLOR_BLACK); 
       tft.setTextSize(3); 
       tft.setCursor(10, 70); 
       tft.print("TEMP: ");
+      if(temp > 35) tft.setTextColor(COLOR_RED, COLOR_BLACK);
       tft.setTextColor(COLOR_WHITE, COLOR_BLACK); 
       tft.print(temp, 1); 
       tft.print(" C  ");
@@ -194,11 +200,11 @@ public:
     }
     
     if (abs(hum - lastHum) >= 0.1 || forceRedraw) {
-      tft.setTextColor(COLOR_GREEN, COLOR_BLACK); 
+      tft.setTextColor(COLOR_WHITE, COLOR_BLACK); 
       tft.setTextSize(3); 
       tft.setCursor(10, 130); 
       tft.print("HUMI: ");
-      tft.setTextColor(COLOR_WHITE, COLOR_BLACK); 
+      tft.setTextColor(COLOR_CYAN, COLOR_BLACK); 
       tft.print(hum, 1); 
       tft.print(" %  ");
       lastHum = hum;
@@ -224,12 +230,7 @@ public:
     uint32_t lastSync = prefs.getUInt("last_sync", 0);
     if (rtc.lostPower()) {
       if (syncWiFiTime()) prefs.putUInt("last_sync", rtc.now().unixtime());
-    } else {
-      uint32_t currentSec = rtc.now().unixtime();
-      if (lastSync == 0 || (currentSec - lastSync) >= ONE_WEEK_IN_SECONDS) {
-        if (syncWiFiTime()) prefs.putUInt("last_sync", rtc.now().unixtime());
-      }
-    }
+    } else uint32_t currentSec = rtc.now().unixtime();
     prefs.end();
   }
   void update() override {}
@@ -253,9 +254,8 @@ public:
   void draw(bool forceRedraw) override {
     if (forceRedraw) {
       tft.setTextSize(2); 
-      tft.setTextColor(COLOR_YELLOW, COLOR_BLACK);
+      tft.setTextColor(COLOR_WHITE, COLOR_BLACK);
       tft.setCursor(10, 20); 
-      tft.print("CLOCK SYSTEM");
       lastMinute = 99;
     }
     
@@ -271,9 +271,9 @@ public:
     
     DateTime now = rtc.now();
     if (now.minute() != lastMinute || forceRedraw) {
-      tft.setTextColor(COLOR_CYAN, COLOR_BLACK); 
+      tft.setTextColor(COLOR_WHITE, COLOR_BLACK); 
       tft.setTextSize(5); 
-      tft.setCursor(35, 95);
+      tft.setCursor(50, 100);
       char timeBuffer[9];
       sprintf(timeBuffer, "%02d:%02d", now.hour(), now.minute());
       tft.print(timeBuffer);
@@ -282,7 +282,10 @@ public:
   }
 };
 
-RPMPage rpmPage; VoltsPage voltsPage; EnvPage envPage; TimePage timePage;
+RPMPage rpmPage; 
+VoltsPage voltsPage; 
+EnvPage envPage; 
+TimePage timePage;
 DashboardPage* pages[] = { &timePage, &voltsPage, &rpmPage, &envPage };
 const int TOTAL_PAGES = 4;
 int currentPageIndex = 0;
@@ -298,7 +301,7 @@ void setup() {
   delay(100);
 
   tft.init(240, 240);           
-  tft.setRotation(2); 
+  tft.setRotation(1); 
   tft.fillScreen(COLOR_BLACK);  
 
   for (int i = 0; i < TOTAL_PAGES; i++) {
@@ -320,7 +323,8 @@ void loop() {
       while (digitalRead(BUTTON_PIN) == LOW);
     }
   }
-
+  voltsPage.update();
+  if(voltsPage.batteryLow) tft.drawRGBBitmap(200, 10, batteryIcon, 40, 30);
   pages[currentPageIndex]->update();
   pages[currentPageIndex]->draw(pageChanged);
   pageChanged = false;
